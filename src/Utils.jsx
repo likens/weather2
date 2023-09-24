@@ -1,0 +1,93 @@
+import { IconCloudFog, IconCloudRain, IconCloudSnow, IconCloudStorm, IconHaze, IconMist, IconTornado, IconWind, IconCloud, IconSun, IconMoonStars, IconSunHigh, IconHazeMoon } from "@tabler/icons-solidjs";
+
+const OW_URL = "https://api.openweathermap.org";
+const OW_WEATHER_PATH = "/data/2.5/onecall";
+const OW_GEOCODING_PATH = "/geo/1.0/";
+const OW_PARAMS_START = "?appid="
+const OW_API_KEY = import.meta.env.VITE_OPEN_WEATHER_API_KEY;
+export const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+
+export const OW_WEATHER_URL = `${OW_URL}${OW_WEATHER_PATH}${OW_PARAMS_START}${OW_API_KEY}&units=imperial&exclude=minutely`;
+export const OW_REVERSE_GEO_URL = `${OW_URL}${OW_GEOCODING_PATH}reverse${OW_PARAMS_START}${OW_API_KEY}&limit=1`;
+export const OW_ZIP_GEO_URL = `${OW_URL}${OW_GEOCODING_PATH}zip${OW_PARAMS_START}${OW_API_KEY}&limit=20`;
+export const OW_DIRECT_GEO_URL = `${OW_URL}${OW_GEOCODING_PATH}direct${OW_PARAMS_START}${OW_API_KEY}&limit=20`;
+
+const REGEX_ZIP = /^\d{5}(?:-\d{4})?$/;
+const REGEX_CITY = /^[A-Za-z\s']+$/;
+
+export const DEGREE_SYMBOL = "˚";
+export const PERCENT_SYMBOL = "%";
+export const COMPASS_OPTIONS = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+export const CODE_MIST = 701;
+export const CODE_HAZE = 721;
+export const CODE_FOG = 741;
+export const CODE_WIND = 771;
+export const CODE_TORNADO = 781;
+export const CODE_TSTORM = [200, 201, 202, 210, 211, 212, 221, 230, 231, 232];
+export const CODE_RAIN_LIGHT = [300, 301, 310, 321, 500, 501];
+export const CODE_RAIN_HEAVY = [302, 311, 312, 313, 314, 502, 503, 504, 520, 521, 522, 531];
+export const CODE_SNOW_LIGHT = [600, 601, 620, 621];
+export const CODE_SNOW_HEAVY = [602, 622];
+export const CODE_SNOW_MIXED = [511, 611, 612, 613, 615, 616]
+export const CODE_ATMOSPHERE = [CODE_MIST, 711, CODE_HAZE, 731, CODE_FOG, 751, 761, 762, CODE_WIND, CODE_TORNADO];
+export const CODE_CLEAR = [800];
+export const CODE_CLOUD_LIGHT = [801, 802];
+export const CODE_CLOUD_HEAVY = [803, 804];
+
+export const degToCompass = (deg = 0) => COMPASS_OPTIONS[(Math.floor((deg / 22.5) + 0.5) % 16)];
+
+function checkCodes(code, codeList) {
+    if (codeList.includes(code)) {
+        return code;
+    }
+    return false;
+}
+
+export const getWeatherIcon = (code = 800, size = 36, night = false) => {
+    switch (code) {
+        case checkCodes(code, CODE_RAIN_LIGHT):
+            return <IconCloudRain size={size} />;
+        case checkCodes(code, CODE_RAIN_HEAVY):
+            return <IconCloudRain size={size} />;
+        case checkCodes(code, CODE_SNOW_LIGHT):
+            return <IconCloudSnow size={size} />;
+        case checkCodes(code, CODE_SNOW_HEAVY):
+            return <IconCloudSnow size={size} />;
+        case checkCodes(code, CODE_SNOW_MIXED):
+            return <IconCloudSnow size={size} />;
+        case checkCodes(code, CODE_TSTORM):
+            return <IconCloudStorm size={size} />;
+        case checkCodes(code, CODE_CLOUD_HEAVY):
+            return <IconCloud size={size} />;
+        case checkCodes(code, CODE_CLOUD_LIGHT):
+            return <IconCloud size={size} />;
+        case checkCodes(code, CODE_CLEAR):
+            return night ? <IconMoonStars size={size} /> : <IconSunHigh size={size} />;
+        case checkCodes(code, CODE_ATMOSPHERE):
+            switch (code) {
+                case CODE_HAZE:
+                    return <IconMist size={size} />;
+                case CODE_HAZE:
+                    return night ? <IconHazeMoon size={size} /> : <IconHaze size={size} />;
+                case CODE_WIND:
+                    return <IconWind size={size} />;
+                case CODE_TORNADO:
+                    return <IconTornado size={size} />;
+                default:
+                    return <IconCloudFog size={size} />;
+            }
+        default:
+            return <IconCloud size={size} />;
+    }
+}
+
+export const geocodingFetchData = (lat, lon) => {
+    let dataFetched = undefined;
+    Promise.all([
+        fetch(`${OW_WEATHER_URL}&lat=${lat}&lon=${lon}`).then(res => res.json()),
+        fetch(`${OW_REVERSE_GEO_URL}&lat=${lat}&lon=${lon}`).then(res => res.json()),
+    ]).then(data => {
+        dataFetched = data;
+        return dataFetched;
+    });
+}
