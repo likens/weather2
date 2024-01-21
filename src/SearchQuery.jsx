@@ -75,7 +75,7 @@ function SearchQuery(props) {
                 <div className='grid gap-4'>
                     {queryData().map(d => {
                         return (
-                            <Button className="text-sm text-left" 
+                            <Button className="text-sm text-left py-2 pl-4 pr-2" 
                                 onClick={() => handleQueryClick(d.lat, d.lon)}
                                 content={
                                     <>
