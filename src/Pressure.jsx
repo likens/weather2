@@ -1,4 +1,4 @@
-import { PERCENT_SYMBOL } from "./Utils";
+import { CLASSES_WEATHER_SECTIONS } from "./Utils";
 
 function Pressure(props) {
     
@@ -18,14 +18,12 @@ function Pressure(props) {
 
     return (
         <>
-            <div className='bg-neutral-50 border border-neutral-300 rounded-lg p-4'>
-                <div className='grid grid-cols-11 text-xs uppercase text-center font-bold leading-7'>
-                    {pressureBlock("Stormy", "bg-indigo-400", props.pressure < 980)}
-                    {pressureBlock("Rain", "bg-sky-400", props.pressure >= 980 && props.pressure < 1000)}
-                    {pressureBlock("Change", "bg-teal-400", props.pressure >= 1000 && props.pressure < 1020)}
-                    {pressureBlock("Fair", "bg-lime-400", props.pressure >= 1020 && props.pressure < 1040)}
-                    {pressureBlock("Dry", "bg-amber-400", props.pressure >= 1040)}
-                </div>
+            <div id="pressure"  className={`${CLASSES_WEATHER_SECTIONS} grid grid-cols-11 text-xs uppercase text-center font-bold leading-7 text-black`}>
+                {pressureBlock("Stormy", "bg-indigo-400", props.pressure < 980)}
+                {pressureBlock("Rain", "bg-sky-400", props.pressure >= 980 && props.pressure < 1000)}
+                {pressureBlock("Change", "bg-teal-400", props.pressure >= 1000 && props.pressure < 1020)}
+                {pressureBlock("Fair", "bg-lime-400", props.pressure >= 1020 && props.pressure < 1040)}
+                {pressureBlock("Dry", "bg-amber-400", props.pressure >= 1040)}
             </div>
         </>
     )

@@ -1,7 +1,7 @@
 import { createEffect, createSignal } from 'solid-js'
 import { debounce } from '@solid-primitives/scheduled';
 import { IconChevronRight, IconX } from '@tabler/icons-solidjs';
-import { OW_WEATHER_URL } from './Utils';
+import { NOMINATIM_SEARCH_URL } from './Utils';
 import Button from './Button';
 import Loader from './Loader';
 import { useAppActions } from './Store';
@@ -35,7 +35,7 @@ function SearchQuery(props) {
 	const handleQuery = (e) => {
 		const val = e.target.value;
 		if (val) {
-			fetch(`https://nominatim.openstreetmap.org/search?q=${val}&format=json`)
+			fetch(`${NOMINATIM_SEARCH_URL}&q=${val}`)
 			.then(res => res.json())
 			.then(data => {
                 setQuerying(false);

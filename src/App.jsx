@@ -3,49 +3,7 @@ import Weather from './Weather';
 import Loader from './Loader';
 import Start from './Start';
 import { useAppStore } from './Store';
-
-// this.setState({
-// 	theme: theme,
-// 	weather: {
-// 		raw: json,
-// 		times: {
-// 			current: time,
-// 			sunrise: sunrise,
-// 			sunset: sunset
-// 		},
-// 		temps: {
-// 			current: json.current.temp,
-// 			feels_like: json.current.feels_like,
-// 			high: json.daily[0].temp.max,
-// 			low: json.daily[0].temp.min
-// 		},
-// 		precip: {
-// 			humidity: json.current.humidity,
-// 			probability: json.daily[0].pop,
-// 			dew_point: json.daily[0].dew_point
-// 		},
-// 		misc: {
-// 			pressure: json.current.pressure,
-// 			visibility: json.current.visibility,
-// 			wind: {
-// 				speed: json.current.wind_speed,
-// 				deg: json.current.wind_deg
-// 			}
-// 		},
-// 		desc: {
-// 			code: json.current.weather[0].id,
-// 			tagline: json.current.weather[0].description,
-// 			term: term,
-// 			time: time,
-// 			img: img
-// 		},
-// 		alerts: json.alerts,
-// 		daily: json.daily,
-// 		hourly: json.hourly,
-// 		url: url,
-// 	},
-// })
-
+import { getWeatherBackground } from './Utils';
 
 function App() {
 	
@@ -56,11 +14,6 @@ function App() {
 		setData(state.geolocationData);
 		setLoading(state.loading);
 	})
-
-	// const handlePick = (e) => {
-	// 	console.log(e);
-	// 	geocodingFetch(e.lat, e.lon);
-	// }
 
 	const appView = () => {
 		let components = undefined;
@@ -82,6 +35,7 @@ function App() {
 			<div className='min-w-screen min-h-screen'>
 				<div className='flex justify-center'>
 					{appView()}
+					{data() && <img className='fixed top-0 w-screen h-screen block object-cover -z-10' src={`/backgrounds/${getWeatherBackground(data().weather.current.weather[0].id)}.jpg`} />}
 				</div>
 			</div>
 		</>

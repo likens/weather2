@@ -1,4 +1,4 @@
-import { PERCENT_SYMBOL } from "./Utils";
+import { PERCENT_SYMBOL, CLASSES_WEATHER_SECTIONS } from "./Utils";
 
 function Humidity(props) {
     const humidity = <>
@@ -16,12 +16,10 @@ function Humidity(props) {
     }
     return (
         <>
-            <div className='bg-neutral-50 border border-neutral-300 rounded-lg p-4'>
-                <div className='grid grid-cols-10 text-xs uppercase text-center font-bold leading-7'>
-                    {humidityBlock('Dry', 'bg-amber-400', props.humidity < 40)}
-                    {humidityBlock('Normal', 'bg-emerald-400', props.humidity >= 40 && props.humidity < 70)}
-                    {humidityBlock('Moist', 'bg-cyan-400', props.humidity >= 70)}
-                </div>
+            <div id="humidity" className={`${CLASSES_WEATHER_SECTIONS} grid grid-cols-10 text-xs uppercase text-center font-bold leading-7 text-black`}>
+                {humidityBlock('Dry', 'bg-amber-400', props.humidity < 40)}
+                {humidityBlock('Normal', 'bg-emerald-400', props.humidity >= 40 && props.humidity < 70)}
+                {humidityBlock('Moist', 'bg-cyan-400', props.humidity >= 70)}
             </div>
         </>
     )

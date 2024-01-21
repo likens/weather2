@@ -19,7 +19,7 @@ function SearchGeolocation(props) {
 
     return (
         <>
-            <Button className="w-full" 
+            <Button className="w-full py-2 px-4 gap-4" 
                 content={<>
                     <IconLocationFilled size={24} />
                     <span>Use Current Location</span>

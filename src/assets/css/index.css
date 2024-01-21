@@ -18,37 +18,51 @@
     -webkit-text-size-adjust: 100%;
 }
 
-@media (prefers-color-scheme: light) {
-    :root {
-        /* color: #213547;
-        background-color: #ffffff; */
-    }
-}
-
-@media (prefers-color-scheme: light) {
-    :root {
-        /* color: #213547;
-        background-color: #ffffff; */
-    }
-}
-
-/* width */
 ::-webkit-scrollbar {
     width: 10px;
 }
-  
-/* Track */
 ::-webkit-scrollbar-track {
-    background: #fff;
+    /* background: theme(colors.neutral.100); */
+    background: transparent;
 }
-  
-/* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #000;
+    background: theme(colors.neutral.900);
     border-radius: 5px;
 }
-  
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #333;
+    background: theme(colors.neutral.400);
+}
+
+body {
+    background: theme(colors.neutral.100);
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        /* color: #213547;
+        background-color: #ffffff; */
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+
+    }
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        /* background:  theme(colors.neutral.900); */
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: theme(colors.neutral.100);
+        border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: theme(colors.neutral.400);
+    }
+    body {
+        background: theme(colors.neutral.900);
+    }
 }

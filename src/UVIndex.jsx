@@ -1,3 +1,5 @@
+import { CLASSES_WEATHER_SECTIONS } from "./Utils";
+
 function UVIndex(props) {
 
     const uvIndex = <>
@@ -16,14 +18,12 @@ function UVIndex(props) {
 
     return (
         <>
-            <div className='bg-neutral-50 border border-neutral-300 rounded-lg p-4'>
-                <div className='grid grid-cols-11 text-xs uppercase text-center font-bold leading-7'>
-                    {indexBlock('Low', 'bg-green-400', props.uvindex < 2)}
-                    {indexBlock('Moderate', 'bg-yellow-400', props.uvindex >= 2 && props.uvindex < 6)}
-                    {indexBlock('High', 'bg-orange-400', props.uvindex >= 6 && props.uvindex < 8)}
-                    {indexBlock('Severe', 'bg-red-400', props.uvindex >= 8 && props.uvindex < 11)}
-                    {indexBlock('Extreme', 'bg-purple-400', props.uvindex >= 11)}
-                </div>
+            <div id="uvIndex" className={`${CLASSES_WEATHER_SECTIONS} grid grid-cols-11 text-xs uppercase text-center font-bold leading-7 text-black`}>
+                {indexBlock('Low', 'bg-green-400', props.uvindex < 2)}
+                {indexBlock('Moderate', 'bg-yellow-400', props.uvindex >= 2 && props.uvindex < 6)}
+                {indexBlock('High', 'bg-orange-400', props.uvindex >= 6 && props.uvindex < 8)}
+                {indexBlock('Severe', 'bg-red-400', props.uvindex >= 8 && props.uvindex < 11)}
+                {indexBlock('Extreme', 'bg-purple-400', props.uvindex >= 11)}
             </div>
         </>
     )

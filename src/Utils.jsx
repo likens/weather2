@@ -5,13 +5,20 @@ const OW_WEATHER_PATH = "/data/2.5/onecall";
 const OW_GEOCODING_PATH = "/geo/1.0/";
 const OW_PARAMS_START = "?appid="
 const OW_API_KEY = import.meta.env.VITE_OPEN_WEATHER_API_KEY;
+
+const NOMINATIM_URL = `https://nominatim.openstreetmap.org`;
+const NOMINATIM_REVERSE_PATH = `/reverse`;
+const NOMINATIM_SEARCH_PATH = `/search`;
+const NOMINATIM_PARAMS_START = `?format=json`;
+
 export const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 export const OW_WEATHER_URL = `${OW_URL}${OW_WEATHER_PATH}${OW_PARAMS_START}${OW_API_KEY}&units=imperial&exclude=minutely`;
 export const OW_REVERSE_GEO_URL = `${OW_URL}${OW_GEOCODING_PATH}reverse${OW_PARAMS_START}${OW_API_KEY}&limit=1`;
 export const OW_ZIP_GEO_URL = `${OW_URL}${OW_GEOCODING_PATH}zip${OW_PARAMS_START}${OW_API_KEY}&limit=20`;
 export const OW_DIRECT_GEO_URL = `${OW_URL}${OW_GEOCODING_PATH}direct${OW_PARAMS_START}${OW_API_KEY}&limit=20`;
-export const NOMINATIM_LOCATION_URL = `https://nominatim.openstreetmap.org/reverse?format=json&zoom=10`;
+export const NOMINATIM_LOCATION_URL = `${NOMINATIM_URL}${NOMINATIM_REVERSE_PATH}${NOMINATIM_PARAMS_START}&zoom=10`;
+export const NOMINATIM_SEARCH_URL = `${NOMINATIM_URL}${NOMINATIM_SEARCH_PATH}${NOMINATIM_PARAMS_START}`;
 
 const REGEX_ZIP = /^\d{5}(?:-\d{4})?$/;
 const REGEX_CITY = /^[A-Za-z\s']+$/;
@@ -36,6 +43,8 @@ export const CODE_CLOUD_LIGHT = [801, 802];
 export const CODE_CLOUD_HEAVY = [803, 804];
 
 export const degToCompass = (deg = 0) => COMPASS_OPTIONS[(Math.floor((deg / 22.5) + 0.5) % 16)];
+
+export const CLASSES_WEATHER_SECTIONS = `p-4 bg-neutral-50/50 dark:bg-neutral-900/75 backdrop-blur rounded`;
 
 function checkCodes(code, codeList) {
     if (codeList.includes(code)) {
@@ -76,6 +85,45 @@ export const getWeatherIcon = (code = 800, size = 36, night = false) => {
                     return <IconTornado size={size} />;
                 default:
                     return <IconCloudFog size={size} />;
+            }
+        default:
+            return <IconCloud size={size} />;
+    }
+}
+
+export const getWeatherBackground = (code = 800, night = false) => {
+    let modifier = night ? `night`:`day`;
+    switch (code) {
+        case checkCodes(code, CODE_RAIN_LIGHT):
+            return `rainLight-${modifier}`;
+        case checkCodes(code, CODE_RAIN_HEAVY):
+            return `rainHeavy-${modifier}`;
+        case checkCodes(code, CODE_SNOW_LIGHT):
+            return `snowLight-${modifier}`;
+        case checkCodes(code, CODE_SNOW_HEAVY):
+            return `snowHeavy-${modifier}`;
+        case checkCodes(code, CODE_SNOW_MIXED):
+            return `snowMixed`;
+        case checkCodes(code, CODE_TSTORM):
+            return 'tStorm';
+        case checkCodes(code, CODE_CLOUD_HEAVY):
+            return `cloudsHeavy-${modifier}`;
+        case checkCodes(code, CODE_CLOUD_LIGHT):
+            return `cloudsLight-${modifier}`;
+        case checkCodes(code, CODE_CLEAR):
+            return `clear-${modifier}`;
+        case checkCodes(code, CODE_ATMOSPHERE):
+            switch (code) {
+                case CODE_MIST:
+                    return 'haze';
+                case CODE_HAZE:
+                    return 'haze';
+                case CODE_WIND:
+                    return 'wind';
+                case CODE_TORNADO:
+                    return 'tornado';
+                default:
+                    return `fog-${modifier}`;
             }
         default:
             return <IconCloud size={size} />;
