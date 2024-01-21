@@ -11,6 +11,7 @@ export const OW_WEATHER_URL = `${OW_URL}${OW_WEATHER_PATH}${OW_PARAMS_START}${OW
 export const OW_REVERSE_GEO_URL = `${OW_URL}${OW_GEOCODING_PATH}reverse${OW_PARAMS_START}${OW_API_KEY}&limit=1`;
 export const OW_ZIP_GEO_URL = `${OW_URL}${OW_GEOCODING_PATH}zip${OW_PARAMS_START}${OW_API_KEY}&limit=20`;
 export const OW_DIRECT_GEO_URL = `${OW_URL}${OW_GEOCODING_PATH}direct${OW_PARAMS_START}${OW_API_KEY}&limit=20`;
+export const NOMINATIM_LOCATION_URL = `https://nominatim.openstreetmap.org/reverse?format=json&zoom=10`;
 
 const REGEX_ZIP = /^\d{5}(?:-\d{4})?$/;
 const REGEX_CITY = /^[A-Za-z\s']+$/;
@@ -90,4 +91,25 @@ export const geocodingFetchData = (lat, lon) => {
         dataFetched = data;
         return dataFetched;
     });
+}
+
+export const getWeatherUrl = (lat, lon) => `${OW_WEATHER_URL}&lat=${lat}&lon=${lon}`;
+export const getLocationUrl = (lat, lon) => `${NOMINATIM_LOCATION_URL}&lat=${lat}&lon=${lon}`;
+
+export const formatLocationName = (location) => {
+    let primary;
+    let secondary;
+    if (location.town) {
+        primary = location.town;
+    } else if (location.city) {
+        primary = location.city;
+    } else if (location.county) {
+        primary = location.county;
+    }
+    if (location.state) {
+        secondary = location.state;
+    } else if (location.country) {
+        secondary = location.country;
+    }
+    return {primary:primary,secondary:secondary};
 }

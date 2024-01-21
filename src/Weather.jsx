@@ -1,6 +1,6 @@
 import { createEffect, createSignal } from 'solid-js'
-import { degToCompass, DEGREE_SYMBOL, PERCENT_SYMBOL, getWeatherIcon } from './Utils';
-import { IconArrowUpRight, IconCaretDownFilled, IconCurrentLocation, IconDroplet, IconExternalLink, IconGauge, IconMoodEmpty, IconSunFilled, IconSunrise, IconSunset, IconTemperatureMinus, IconTemperaturePlus, IconUmbrella, IconUvIndex, IconWind, IconWindsock, IconEye, IconCloud } from '@tabler/icons-solidjs';
+import { degToCompass, DEGREE_SYMBOL, PERCENT_SYMBOL, getWeatherIcon, formatLocationName } from './Utils';
+import { IconArrowUpRight, IconCaretDownFilled, IconCurrentLocation, IconDroplet, IconExternalLink, IconGauge, IconMoodEmpty, IconSunFilled, IconSunrise, IconSunset, IconTemperatureMinus, IconTemperaturePlus, IconUmbrella, IconUvIndex, IconWind, IconWindsock, IconEye, IconCloud, IconRefresh, IconStar, IconSettings } from '@tabler/icons-solidjs';
 import UVIndex from './UVIndex';
 import Humidity from './Humidity';
 import Pressure from './Pressure';
@@ -25,7 +25,7 @@ function Weather(props) {
     const [location, setLocation] = createSignal(undefined);
     const [weather, setWeather] = createSignal(undefined);
 
-    const {appReset} = useAppActions()
+    const {appReset,refreshWeather,saveGeolocation} = useAppActions()
 
 	useAppStore.subscribe((state) => {
 		if (state.geolocationData) {
@@ -41,37 +41,43 @@ function Weather(props) {
                     <span>•</span>
                     <span>{datetime().toLocaleString('default', { month: 'short' })} {datetime().toLocaleString('default', { day: 'numeric' })}</span>
                     <span>•</span>
-                    <span>{datetime().toLocaleTimeString('default', { hour: "2-digit", minute: "2-digit" })}</span>
+                    <span>{datetime().toLocaleTimeString('default', { hour: "numeric", minute: "2-digit" })}</span>
                 </div>
             </div>
         )
     }
 
     const Location = () => {
-        let primaryName;
-        let secondaryName;
-        if (location().address.town) {
-            primaryName = location().address.town;
-        } else if (location().address.city) {
-            primaryName = location().address.city;
-        } else if (location().address.county) {
-            primaryName = location().address.county;
-        }
-        if (location().address.state) {
-            secondaryName = location().address.state;
-        } else if (location().address.country) {
-            secondaryName = location().address.country;
-        }
+        const locationName = formatLocationName(location().address);
         return (
-            <div className='flex justify-between'>
-                <button onClick={appReset} className='flex text-sm gap-2 bg-black rounded-full text-white text-left py-1 px-2 font-bold items-center'>
-                    <IconCurrentLocation size={16} />
-                    <span>
-                        {primaryName}, {secondaryName}
-                    </span>
-                    <IconArrowUpRight size={16} />
+            <button onClick={appReset}
+                className='flex text-sm gap-2 bg-black rounded-full text-white text-left py-1 px-2 font-bold items-center'>
+                <IconCurrentLocation size={16} />
+                <span className='whitespace-nowrap overflow-hidden text-ellipsis'>
+                    {locationName.primary}, {locationName.secondary}
+                </span>
+                <IconArrowUpRight size={16} />
+            </button>
+        )
+    }
+
+    const Controls = () => {
+        return (
+            <div className='flex justify-between gap-2'>
+                {/* <div className='flex items-center gap-1 text-sm uppercase font-bold'>Now <IconCaretDownFilled /></div> */}
+                <button onClick={refreshWeather} 
+                    className='flex text-xs gap-2 bg-black rounded-full text-white text-left py-1 pl-2 pr-3 font-bold items-center uppercase'>
+                    <IconRefresh size={16} />
+                    <span>Refresh</span>
                 </button>
-                <div className='flex items-center gap-1 text-sm uppercase font-bold'>Now <IconCaretDownFilled /></div>
+                {/* <button onClick={saveGeolocation} 
+                    className='flex text-sm gap-2 bg-black rounded-full text-white text-left py-1 px-2 font-bold items-center'>
+                    <IconStar size={16} />
+                </button> */}
+                {/* <button onClick={appReset} 
+                    className='flex text-sm gap-2 bg-black rounded-full text-white text-left py-1 px-2 font-bold items-center'>
+                    <IconSettings size={16} />
+                </button> */}
             </div>
         )
     }
@@ -100,23 +106,28 @@ function Weather(props) {
     })
 
     return (
-        <div className='grid gap-4 p-8 w-full'>
+        <div className='grid gap-4 p-4 w-full'>
         
             <div className='grid gap-2 w-full max-w-[600px] mx-auto'>
 
-                {location() && <Location />}
+                {location() && 
+                    <div className='flex flex-wrap gap-2 justify-between'>
+                        <Location />
+                        <Controls />
+                    </div>}
+
                 {datetime() && <Datetime />}
 
                 {weather() && <div className='grid w-full gap-6 pt-4'>
 
-                    <div className='flex gap-4 mx-auto'>
+                    <div className='flex flex-wrap gap-4 mx-auto items-center'>
 
-                        <div className='flex justify-center'>
+                        <div className='flex -my-4 mx-auto justify-center'>
                             {getWeatherIcon(weather().current.weather[0].id, 120, weather().current.dt > weather().current.sunset)}
                         </div>
 
-                        <div className='grid gap-2 self-center'>
-                            <div className='capitalize font-bold text-3xl whitespace-nowrap'>{weather().current.weather[0].description}</div> 
+                        <div className='grid gap-2 self-center w-min mx-auto'>
+                            <div className='capitalize font-bold text-3xl'>{weather().current.weather[0].description}</div> 
                             <div className='flex gap-2 items-end'>
                                 <div className='text-6xl font-bold leading-none'>{Math.round(weather().current.temp)}{DEGREE_SYMBOL}</div>
                                 <div className='grid text-sm text-right -translate-y-1 whitespace-nowrap'>
@@ -131,7 +142,7 @@ function Weather(props) {
 
                     <div className='grid gap-4'>
 
-                        <div className='flex gap-8 justify-evenly leading-none bg-neutral-50 border border-neutral-300 rounded-lg p-4'>
+                        <div className='grid grid-cols-2 min-[400px]:grid-cols-4 gap-8 justify-evenly leading-none bg-neutral-50 border border-neutral-300 rounded-lg p-4'>
                             <WeatherStat 
                                 icon={<IconUmbrella size={26} />}
                                 label="Precipitation"

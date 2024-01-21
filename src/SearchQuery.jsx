@@ -8,7 +8,7 @@ import { useAppActions } from './Store';
 
 function SearchQuery(props) {
 
-    const {setGeolocationData, setLoading} = useAppActions();
+    const {fetchWeather} = useAppActions();
 
     const [queryValue, setQueryValue] = createSignal("");
 	const [queryData, setQueryData] = createSignal(undefined);
@@ -52,15 +52,7 @@ function SearchQuery(props) {
 	}
 
     const handleQueryClick = (lat, lon) => {
-        console.log(lat, lon);
-        setLoading(true);
-        Promise.all([
-            fetch(`${OW_WEATHER_URL}&lat=${lat}&lon=${lon}`).then(res => res.json()),
-            fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=10`).then(res => res.json())
-        ]).then(data => {
-            setGeolocationData({weather: data[0], location: data[1]});
-            setLoading(false);
-        });
+        fetchWeather(lat, lon);
     }
 
     return (
