@@ -117,7 +117,7 @@ function Weather(props) {
                         content={
                             <>
                                 <IconX size={20} />
-                                <span>Cancel</span>
+                                <span>Close</span>
                             </>
                         } />
                 </div>
