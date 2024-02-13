@@ -151,11 +151,11 @@ function Weather(props) {
                                     </>} onClick={handleDialogOpen} />
                                 </div>
                             </div>
-                            <div className='flex flex-wrap gap-8 pt-2 mx-auto items-center'>
-                                <div className='flex -mt-4 -mb-8 mx-auto justify-center'>
+                            <div className='flex flex-wrap gap-4 pt-2 mx-auto items-center'>
+                                <div className='flex mx-auto justify-center'>
                                     {getWeatherIcon(weather().current.weather[0].id, 120, weather().current.dt > weather().current.sunset)}
                                 </div>
-                                <div className='grid gap-2 self-center w-max mx-auto'>
+                                <div className='grid gap-4 self-center w-max mx-auto'>
                                     <div className='capitalize font-bold text-3xl text-center'>{weather().current.weather[0].description}</div> 
                                     <div className='flex gap-2 items-end'>
                                         <div className='text-6xl font-bold leading-none'>{Math.round(weather().current.temp)}{DEGREE_SYMBOL}</div>
