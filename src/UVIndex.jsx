@@ -9,7 +9,7 @@ function UVIndex(props) {
 
     const indexBlock = (name, color, active) => {
         return (
-            <div className={`grid ${color} self-end outline outline-1 relative whitespace-nowrap overflow-ellipsis ${active ? `z-20 col-span-3` : `z-10 col-span-2`}`}>
+            <div className={`grid ${color} self-end outline outline-1 relative whitespace-nowrap ${active ? `z-20 col-span-3` : `z-10 col-span-2`}`}>
                 {active && uvIndex}
                 <div className="pl-1 whitespace-nowrap overflow-hidden">{name}</div>
             </div>

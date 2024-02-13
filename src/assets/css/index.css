@@ -34,7 +34,7 @@
 }
 
 body {
-    background: theme(colors.neutral.100);
+    background: theme(colors.neutral.50);
 }
 
 @media (prefers-color-scheme: light) {
@@ -56,7 +56,7 @@ body {
         background: transparent;
     }
     ::-webkit-scrollbar-thumb {
-        background: theme(colors.neutral.100);
+        background: theme(colors.neutral.50);
         border-radius: 5px;
     }
     ::-webkit-scrollbar-thumb:hover {

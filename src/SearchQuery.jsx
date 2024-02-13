@@ -60,7 +60,7 @@ function SearchQuery(props) {
             <div className='flex gap-2 justify-center relative'>
                 <input type="text" 
                     value={queryValue()}
-                    className='font-bold border border-black py-2 px-4 rounded w-full'
+                    className='font-bold border-2 border-black py-2 px-4 rounded w-full dark:bg-neutral-800 dark:border-neutral-400'
                     placeholder='Search by City/State or ZIP'
                     onInput={(e) => handleQueryUpdate(e)} />
                 {queryValue() && 
@@ -88,7 +88,7 @@ function SearchQuery(props) {
                 </div>}
 
             {querying() && <Loader className="mx-auto" text="" size={64} />}
-            {noResults() && <div className='uppercase text-sm font-bold text-center'>No results</div>}
+            {noResults() && <div className='text-xs font-bold text-center'>No results found!</div>}
             
         </div>
     )

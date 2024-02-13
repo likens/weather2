@@ -10,6 +10,7 @@ function SunMoonTime(props) {
     const setTime = current > today.sunset ? tomorrow.sunrise : today.sunset;
     const setLabel = current > today.sunset ? "Sunrise" : "Sunset";
     const icon = current > today.sunset ? <IconMoonFilled size={24} /> : <IconSunFilled size={24} />
+    const color = current > today.sunset ? "text-blue-400" : "text-yellow-400";
     const range = setTime-riseTime;
     const reached = current-riseTime;
     const posX = reached / range * 100;
@@ -24,7 +25,7 @@ function SunMoonTime(props) {
                     <div className='w-full relative z-10 overflow-hidden mx-1'>
                         <div className='absolute z-10 top-1/2 left-1/2 -translate-x-1/2 w-full h-1px border-t-[1px] border-neutral-300 dark:border-neutral-800 border-dashed'></div>
                     </div>
-                    <div className="top-1/2 left-0 absolute -translate-y-[12px] z-10 text-yellow-400" style={{left: `${posX}%`}}>
+                    <div className={`top-1/2 left-0 absolute -translate-y-[12px] z-10 ${color}`} style={{left: `${posX}%`}}>
                         <div className="relative z-20">{icon}</div>
                         {/* <div className="absolute w-[32px] rounded-full h-full top-0 left-1/2 -translate-x-1/2 bg-neutral-200 dark:bg-neutral-900 z-10"></div> */}
                     </div>

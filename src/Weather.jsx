@@ -1,7 +1,7 @@
 import { createEffect, createSignal } from 'solid-js'
 import { degToCompass, DEGREE_SYMBOL, PERCENT_SYMBOL, getWeatherIcon, formatLocationName, CLASSES_WEATHER_SECTIONS } from './Utils';
 import Button from './Button';
-import { IconArrowUpRight, IconCaretDownFilled, IconCurrentLocation, IconDroplet, IconExternalLink, IconGauge, IconMoodEmpty, IconSunFilled, IconSunrise, IconSunset, IconTemperatureMinus, IconTemperaturePlus, IconUmbrella, IconUvIndex, IconWind, IconWindsock, IconEye, IconCloud, IconRefresh, IconStar, IconSettings } from '@tabler/icons-solidjs';
+import { IconUmbrella, IconWind, IconEye, IconCloud, IconRefresh, IconStar, IconArrowUpLeft, IconX, IconMenu2, IconSettingsFilled } from '@tabler/icons-solidjs';
 import UVIndex from './UVIndex';
 import Humidity from './Humidity';
 import Pressure from './Pressure';
@@ -16,8 +16,16 @@ function Weather(props) {
     const [datetime, setDatetime] = createSignal(undefined);
     const [location, setLocation] = createSignal(undefined);
     const [weather, setWeather] = createSignal(undefined);
+    const [dialog, setDialog] = createSignal(false);
 
     const {appReset,refreshWeather,saveGeolocation} = useAppActions();
+
+    const handleGetLatest = () => refreshWeather();
+    const handleChangeLocation = () => appReset();
+    const handleSaveLocation = () => saveGeolocation();
+    const handleDialogOpen = () => setDialog(true);
+    const handleDialogClose = () => setDialog(false);
+    const handleSettings = () => undefined;
 
 	useAppStore.subscribe((state) => {
 		if (state.geolocationData) {
@@ -42,35 +50,10 @@ function Weather(props) {
     const Location = () => {
         const locationName = formatLocationName(location().address);
         return (
-            <Button className="text-sm gap-2 py-1 px-2" 
-                content={<>
-                    <IconCurrentLocation size={16} />
-                    <span className='whitespace-nowrap overflow-hidden text-ellipsis'>
-                        {locationName.primary}, {locationName.secondary}
-                    </span>
-                    <IconArrowUpRight size={16} />
-                </>} 
-                onClick={appReset} />
-        )
-    }
-
-    const Controls = () => {
-        return (
-            <div className='flex justify-between gap-2'>
-                
-                <Button className="p-1 gap-2 text-xs" content={<>
-                    <IconRefresh size={20} />
-                </>} onClick={refreshWeather} />
-                {/* <div className='flex items-center gap-1 text-sm uppercase font-bold'>Now <IconCaretDownFilled /></div> */}
-                
-                {/* <button onClick={saveGeolocation} 
-                    className='flex text-sm gap-2 bg-black rounded-full text-white text-left py-1 px-2 font-bold items-center'>
-                    <IconStar size={16} />
-                </button> */}
-                {/* <button onClick={appReset} 
-                    className='flex text-sm gap-2 bg-black rounded-full text-white text-left py-1 px-2 font-bold items-center'>
-                    <IconSettings size={16} />
-                </button> */}
+            <div className='flex text-sm gap-2 items-center font-bold'>
+                <span className='whitespace-nowrap overflow-hidden text-ellipsis'>
+                    {locationName.primary}, {locationName.secondary}
+                </span>
             </div>
         )
     }
@@ -90,6 +73,58 @@ function Weather(props) {
         )
     }
 
+    const Dialog = () => {
+        return (
+            <>
+                 {/* data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0  */}
+                <div data-state="open" className='fixed inset-0 z-50 bg-white/75 dark:bg-black/75 backdrop-blur-sm' />
+                {/* duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] */}
+                <div data-state="open" className='bg-white dark:bg-black backdrop-blur-sm rounded shadow-md fixed left-[50%] top-[50%] z-50 grid w-10/12 max-w-md translate-x-[-50%] translate-y-[-50%] gap-2 p-4'>
+                    <Button className="w-full p-2 gap-2 justify-items-start" 
+                        onClick={handleGetLatest}
+                        content={
+                            <>
+                                <IconRefresh size={20} />
+                                <span>Get Latest</span>
+                            </>
+                        } />
+                    <Button className="w-full p-2 gap-2 justify-items-start" 
+                        onClick={handleChangeLocation}
+                        content={
+                            <>
+                                <IconArrowUpLeft size={20} />
+                                <span>Change Location</span>
+                            </>
+                        } />
+                    <Button className="w-full p-2 gap-2 justify-items-start pointer-events-none opacity-30 text-neutral-500" 
+                        onClick={handleSaveLocation}
+                        content={
+                            <>
+                                <IconStar size={20} />
+                                <span>Save Location</span>
+                            </>
+                        } />
+                    <Button className="w-full p-2 gap-2 justify-items-start pointer-events-none opacity-30 text-neutral-500" 
+                        onClick={handleSettings}
+                        content={
+                            <>
+                                <IconSettingsFilled size={20} />
+                                <span>Settings</span>
+                            </>
+                        } />
+                    <Button className="w-full p-2 gap-2 justify-items-start" 
+                        onClick={handleDialogClose}
+                        content={
+                            <>
+                                <IconX size={20} />
+                                <span>Cancel</span>
+                            </>
+                        } />
+                </div>
+            </>
+        )
+    }
+
     createEffect(() => {
         if (data()) {
             setDatetime(new Date(data().weather.current.dt * 1000));
@@ -105,18 +140,23 @@ function Weather(props) {
                 {weather() && 
                     <>
                         <div className={`${CLASSES_WEATHER_SECTIONS} grid gap-2`}>
-                            {location() && 
-                                <div className='flex flex-wrap gap-2 justify-between'>
-                                    <Location />
-                                    <Controls />
-                                </div>}
-                            {datetime() && <Datetime />}
-                            <div className='flex flex-wrap gap-4 mx-auto items-center'>
+                            <div className='flex flex-wrap gap-2 justify-between'>
+                                <div className='grid'>
+                                    {location() && <Location />}
+                                    {datetime() && <Datetime />}
+                                </div>
+                                <div className='flex justify-between gap-2'>
+                                    <Button className="py-.5 px-2 gap-2 text-xs" content={<>
+                                        <IconMenu2 size={24} />
+                                    </>} onClick={handleDialogOpen} />
+                                </div>
+                            </div>
+                            <div className='flex flex-wrap gap-8 pt-2 mx-auto items-center'>
                                 <div className='flex -mt-4 -mb-8 mx-auto justify-center'>
                                     {getWeatherIcon(weather().current.weather[0].id, 120, weather().current.dt > weather().current.sunset)}
                                 </div>
                                 <div className='grid gap-2 self-center w-max mx-auto'>
-                                    <div className='capitalize font-bold text-3xl'>{weather().current.weather[0].description}</div> 
+                                    <div className='capitalize font-bold text-3xl text-center'>{weather().current.weather[0].description}</div> 
                                     <div className='flex gap-2 items-end'>
                                         <div className='text-6xl font-bold leading-none'>{Math.round(weather().current.temp)}{DEGREE_SYMBOL}</div>
                                         <div className='grid text-sm text-right -translate-y-1 whitespace-nowrap'>
@@ -128,7 +168,8 @@ function Weather(props) {
                                 </div>
                             </div>
                         </div>
-                        <div id="stats" className={`${CLASSES_WEATHER_SECTIONS} grid grid-cols-2 min-[400px]:grid-cols-4 gap-8 justify-evenly leading-none`}>
+                        {/* min-[400px]:grid-cols-4  */}
+                        <div id="stats" className={`${CLASSES_WEATHER_SECTIONS} grid grid-cols-4 gap-8 justify-evenly leading-none`}>
                             <WeatherStat 
                                 icon={<IconUmbrella size={26} />}
                                 label="Precipitation"
@@ -161,6 +202,9 @@ function Weather(props) {
                     </>
                 }
             </div>
+
+            {weather() && dialog() && <Dialog />}
+
         </div>
     )
 }

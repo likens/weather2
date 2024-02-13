@@ -8,7 +8,7 @@ function Humidity(props) {
 
     const humidityBlock = (name, color, active) => {
         return (
-            <div className={`grid ${color} self-end outline outline-1 relative whitespace-nowrap overflow-ellipsis ${active ? `z-20 col-span-4` : `z-10 col-span-3`}`}>
+            <div className={`grid ${color} self-end outline outline-1 relative whitespace-nowrap ${active ? `z-20 col-span-4` : `z-10 col-span-3`}`}>
                 {active && humidity}
                 <div className="pl-1 whitespace-nowrap overflow-hidden">{name}</div>
             </div>

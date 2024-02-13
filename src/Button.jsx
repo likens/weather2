@@ -1,7 +1,7 @@
 
 
 function Button(props) {
-    const clazz = `flex items-center justify-center font-bold border border-black rounded cursor-pointer bg-neutral-200 dark:bg-neutral-700 ${props.className}`;
+    const clazz = `flex items-center justify-center font-bold border border-black rounded cursor-pointer bg-black text-white dark:bg-white dark:text-black ${props.className}`;
     return (
         <>
             <button type='button' 

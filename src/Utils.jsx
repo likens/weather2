@@ -44,7 +44,7 @@ export const CODE_CLOUD_HEAVY = [803, 804];
 
 export const degToCompass = (deg = 0) => COMPASS_OPTIONS[(Math.floor((deg / 22.5) + 0.5) % 16)];
 
-export const CLASSES_WEATHER_SECTIONS = `p-4 bg-neutral-50/50 dark:bg-neutral-900/75 backdrop-blur rounded`;
+export const CLASSES_WEATHER_SECTIONS = `p-4 bg-neutral-50/50 dark:bg-neutral-900/75 border border-neutral-100/50 dark:border-neutral-900 backdrop-blur rounded shadow-md`;
 
 function checkCodes(code, codeList) {
     if (codeList.includes(code)) {

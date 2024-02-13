@@ -3,6 +3,7 @@ import SearchGeolocation from './SearchGeolocation'
 import SearchQuery from './SearchQuery'
 import logo from './assets/img/logo.svg';
 import SearchSaved from './SearchSaved'
+import { IconArrowUpRight } from '@tabler/icons-solidjs';
 
 function Start(props) {
 
@@ -16,6 +17,9 @@ function Start(props) {
                 <SearchGeolocation />
                 {/* <SearchSaved /> */}
                 <SearchQuery />
+                <div className='self-end fixed bottom-0 left-0 w-full text-center'>
+                    <a className='text-neutral-200 dark:text-neutral-700 text-xs uppercase p-2 inline-flex' href="https://weather.likens.dev">Weather <IconArrowUpRight size={16} /></a>
+                </div>
             </div>
         </>
     )

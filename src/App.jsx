@@ -1,9 +1,9 @@
-import { createEffect, createSignal } from 'solid-js'
+import { createSignal } from 'solid-js'
 import Weather from './Weather';
 import Loader from './Loader';
 import Start from './Start';
 import { useAppStore } from './Store';
-import { getWeatherBackground } from './Utils';
+import { getWeatherBackground, CLASSES_WEATHER_SECTIONS } from './Utils';
 
 function App() {
 	
@@ -24,7 +24,7 @@ function App() {
 				components = <Start />
 			}
 		} else {
-			components = <Loader className="py-12" />
+			components = <Loader className={`${CLASSES_WEATHER_SECTIONS} w-full justify-center mx-4 mt-4 shadow-none`} />
 		}
 
 		return components;
