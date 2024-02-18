@@ -35,14 +35,12 @@ function Weather(props) {
 
     const Datetime = () => {
         return (
-            <div className='flex leading-tight font-bold text-sm'>
-                <div className='flex gap-1'>
-                    <span>{datetime().toLocaleString('default', { weekday: 'short' })}</span>
-                    <span>•</span>
-                    <span>{datetime().toLocaleString('default', { month: 'short' })} {datetime().toLocaleString('default', { day: 'numeric' })}</span>
-                    <span>•</span>
-                    <span>{datetime().toLocaleTimeString('default', { hour: "numeric", minute: "2-digit" })}</span>
-                </div>
+            <div className='flex gap-1 leading-tight font-bold'>
+                <span>{datetime().toLocaleString('default', { weekday: 'short' })}</span>
+                <span>•</span>
+                <span>{datetime().toLocaleString('default', { month: 'short' })} {datetime().toLocaleString('default', { day: 'numeric' })}</span>
+                <span>•</span>
+                <span>{datetime().toLocaleTimeString('default', { hour: "numeric", minute: "2-digit" })}</span>
             </div>
         )
     }
@@ -50,11 +48,9 @@ function Weather(props) {
     const Location = () => {
         const locationName = formatLocationName(location().address);
         return (
-            <div className='flex text-sm gap-2 items-center font-bold'>
-                <span className='whitespace-nowrap overflow-hidden text-ellipsis'>
-                    {locationName.primary}, {locationName.secondary}
-                </span>
-            </div>
+            <span className='whitespace-nowrap overflow-hidden text-ellipsis font-bold'>
+                {locationName.primary}, {locationName.secondary}
+            </span>
         )
     }
 
@@ -139,19 +135,19 @@ function Weather(props) {
             <div className='w-full max-w-[600px] mx-auto grid gap-4'>
                 {weather() && 
                     <>
-                        <div className={`${CLASSES_WEATHER_SECTIONS} grid gap-2`}>
-                            <div className='flex flex-wrap gap-2 justify-between'>
+                        <div className={`${CLASSES_WEATHER_SECTIONS} grid gap-6`}>
+                            <div className='flex gap-2 justify-between'>
                                 <div className='grid'>
                                     {location() && <Location />}
                                     {datetime() && <Datetime />}
                                 </div>
                                 <div className='flex justify-between gap-2'>
-                                    <Button className="py-.5 px-2 gap-2 text-xs" content={<>
+                                    <Button className="h-10 w-10 gap-2 text-xs" content={<>
                                         <IconMenu2 size={24} />
                                     </>} onClick={handleDialogOpen} />
                                 </div>
                             </div>
-                            <div className='flex flex-wrap gap-4 pt-2 mx-auto items-center'>
+                            <div className='flex flex-wrap gap-4 mx-auto items-center'>
                                 <div className='flex mx-auto justify-center'>
                                     {getWeatherIcon(weather().current.weather[0].id, 120, weather().current.dt > weather().current.sunset)}
                                 </div>
@@ -159,7 +155,7 @@ function Weather(props) {
                                     <div className='capitalize font-bold text-3xl text-center'>{weather().current.weather[0].description}</div> 
                                     <div className='flex gap-2 items-end'>
                                         <div className='text-6xl font-bold leading-none'>{Math.round(weather().current.temp)}{DEGREE_SYMBOL}</div>
-                                        <div className='grid text-sm text-right -translate-y-1 whitespace-nowrap'>
+                                        <div className='grid text-sm text-right whitespace-nowrap'>
                                             <div>High: <span className='inline-flex font-bold text-lg leading-5 w-8'>{Math.round(weather().daily[0].temp.max)}{DEGREE_SYMBOL}</span></div>
                                             <div>Low: <span className='inline-flex font-bold text-lg leading-5 w-8'>{Math.round(weather().daily[0].temp.min)}{DEGREE_SYMBOL}</span></div>
                                             <div>Feels Like: <span className='inline-flex font-bold text-lg leading-5 w-8'>{Math.round(weather().current.feels_like)}{DEGREE_SYMBOL}</span></div>
@@ -167,23 +163,26 @@ function Weather(props) {
                                     </div>
                                 </div>
                             </div>
+                            <div id="stats" className={`grid grid-cols-4 gap-8 justify-evenly leading-none`}>
+                                <WeatherStat 
+                                    icon={<IconUmbrella size={26} />}
+                                    label="Precip."
+                                    value={<>{Math.round(weather().daily[0].pop * 100)}<span className='text-xs'>{PERCENT_SYMBOL}</span></>} />
+                                <WeatherStat 
+                                    icon={<IconWind size={26} />}
+                                    label="Wind"
+                                    value={<>{Math.round(weather().current.wind_speed)}<span className='text-xs'>mph, {degToCompass(weather().current.wind_deg)}</span></>} />
+                                <Visibility />
+                                <WeatherStat 
+                                    icon={<IconCloud size={26} />}
+                                    label="Cloudiness"
+                                    value={<>{Math.round(weather().current.clouds)}<span className='text-xs'>%</span></>} />
+                            </div>
+
                         </div>
-                        {/* min-[400px]:grid-cols-4  */}
-                        <div id="stats" className={`${CLASSES_WEATHER_SECTIONS} grid grid-cols-4 gap-8 justify-evenly leading-none`}>
-                            <WeatherStat 
-                                icon={<IconUmbrella size={26} />}
-                                label="Precipitation"
-                                value={<>{Math.round(weather().daily[0].pop * 100)}<span className='text-sm'>{PERCENT_SYMBOL}</span></>} />
-                            <WeatherStat 
-                                icon={<IconWind size={26} />}
-                                label="Wind"
-                                value={<>{Math.round(weather().current.wind_speed)}<span className='text-sm'>mph, {degToCompass(weather().current.wind_deg)}</span></>} />
-                            <Visibility />
-                            <WeatherStat 
-                                icon={<IconCloud size={26} />}
-                                label="Cloudiness"
-                                value={<>{Math.round(weather().current.clouds)}<span className='text-sm'>%</span></>} />
-                        </div>
+                        <UVIndex uvindex={Math.round(weather().current.uvi)} />
+                        <Humidity humidity={weather().current.humidity} />
+                        <Pressure pressure={weather().current.pressure} />
                         <SunMoonTime 
                             current={weather().current.dt}
                             today={{
@@ -195,9 +194,6 @@ function Weather(props) {
                                 sunset: weather().daily[1].sunset
                             }}
                         />
-                        <UVIndex uvindex={Math.round(weather().current.uvi)} />
-                        <Humidity humidity={weather().current.humidity} />
-                        <Pressure pressure={weather().current.pressure} />
                         <Radar location={location()} />
                     </>
                 }

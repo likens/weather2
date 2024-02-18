@@ -4,7 +4,7 @@ const OW_URL = "https://api.openweathermap.org";
 const OW_WEATHER_PATH = "/data/2.5/onecall";
 const OW_GEOCODING_PATH = "/geo/1.0/";
 const OW_PARAMS_START = "?appid="
-const OW_API_KEY = import.meta.env.VITE_OPEN_WEATHER_API_KEY;
+export const OW_API_KEY = import.meta.env.VITE_OPEN_WEATHER_API_KEY;
 
 const NOMINATIM_URL = `https://nominatim.openstreetmap.org`;
 const NOMINATIM_REVERSE_PATH = `/reverse`;
@@ -13,12 +13,49 @@ const NOMINATIM_PARAMS_START = `?format=json`;
 
 export const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
+export const TOMORROW_IO_API_KEY = import.meta.env.VITE_TOMORROW_IO_API_KEY;
+
+const TOMORROW_IO_URL = "https://api.tomorrow.io/v4";
+const TOMORROW_IO_TIMELINES = "/timelines";
+const TOMORROW_IO_REALTIME = "/weather/realtime"
+const TOMORROW_IO_PARAMS_START = "?apikey="
+const TOMORROW_IO_FIELDS = [
+    "precipitationIntensity",
+    "precipitationType",
+    "precipitationProbability",
+    "windSpeed",
+    "windGust",
+    "windDirection",
+    "temperature",
+    "temperatureApparent",
+    "cloudCover",
+    "cloudBase",
+    "cloudCeiling",
+    "weatherCode",
+    "weatherCodeFullDay",
+    "weatherCodeDay",
+    "weatherCodeNight",
+    "uvIndex",
+    "uvHealthConcern",
+    "dewPoint",
+    "humidity",
+    "pressureSurfaceLevel",
+    "pressureSeaLevel",
+    "sunriseTime",
+    "sunsetTime",
+    "visibility",
+    "moonPhase"
+];
+const TOMORROW_IO_UNITS = ["imperial", "metric"]
+const TOMORROW_IO_TIMESTEPS = ["current", "1h", "1d"]
+
 export const OW_WEATHER_URL = `${OW_URL}${OW_WEATHER_PATH}${OW_PARAMS_START}${OW_API_KEY}&units=imperial&exclude=minutely`;
 export const OW_REVERSE_GEO_URL = `${OW_URL}${OW_GEOCODING_PATH}reverse${OW_PARAMS_START}${OW_API_KEY}&limit=1`;
 export const OW_ZIP_GEO_URL = `${OW_URL}${OW_GEOCODING_PATH}zip${OW_PARAMS_START}${OW_API_KEY}&limit=20`;
 export const OW_DIRECT_GEO_URL = `${OW_URL}${OW_GEOCODING_PATH}direct${OW_PARAMS_START}${OW_API_KEY}&limit=20`;
 export const NOMINATIM_LOCATION_URL = `${NOMINATIM_URL}${NOMINATIM_REVERSE_PATH}${NOMINATIM_PARAMS_START}&zoom=10`;
 export const NOMINATIM_SEARCH_URL = `${NOMINATIM_URL}${NOMINATIM_SEARCH_PATH}${NOMINATIM_PARAMS_START}`;
+export const TOMORROW_IO_WEATHER_URL = `${TOMORROW_IO_URL}${TOMORROW_IO_REALTIME}${TOMORROW_IO_PARAMS_START}${TOMORROW_IO_API_KEY}&units=imperial`
 
 const REGEX_ZIP = /^\d{5}(?:-\d{4})?$/;
 const REGEX_CITY = /^[A-Za-z\s']+$/;
@@ -141,8 +178,10 @@ export const geocodingFetchData = (lat, lon) => {
     });
 }
 
+
 export const getWeatherUrl = (lat, lon) => `${OW_WEATHER_URL}&lat=${lat}&lon=${lon}`;
 export const getLocationUrl = (lat, lon) => `${NOMINATIM_LOCATION_URL}&lat=${lat}&lon=${lon}`;
+export const getTomorrowUrl = (lat, lon) => `${TOMORROW_IO_WEATHER_URL}&location=${lat},${lon}`
 
 export const formatLocationName = (location) => {
     let primary;

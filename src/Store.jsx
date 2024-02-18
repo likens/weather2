@@ -1,5 +1,5 @@
 import create from 'solid-zustand';
-import { getWeatherUrl, getLocationUrl, formatLocationName } from './Utils';
+import { getWeatherUrl, getLocationUrl, formatLocationName, getTomorrowUrl } from './Utils';
 
 export const useAppStore = create((set, get) => ({
 
@@ -24,10 +24,18 @@ export const useAppStore = create((set, get) => ({
         },
         fetchWeather: (lat,lon,setting=true) => {
             get().actions.setLoading(true);
-            const requests = [getWeatherUrl(lat,lon), getLocationUrl(lat,lon)]
+            const requests = [
+                getWeatherUrl(lat,lon),
+                getLocationUrl(lat,lon),
+                // getTomorrowUrl(lat,lon)
+            ]
             Promise.all(requests.map(req => fetch(req).then(res => res.json())))
             .then(json => {
-                const data = { weather: json[0], location: json[1] };
+                const data = { 
+                    weather: json[0], 
+                    location: json[1],
+                    // tomorrow: json[2]
+                };
                 if (setting) {
                     get().actions.setGeolocationData(data);
                     get().actions.setLoading(false);

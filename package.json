@@ -12,6 +12,7 @@
     "@solid-primitives/refs": "^1.0.5",
     "@solid-primitives/scheduled": "^1.4.0",
     "@tabler/icons-solidjs": "^2.28.0",
+    "@types/mapbox-gl": "^2.7.21",
     "chart.js": "^4.3.3",
     "mapbox-gl": "^2.15.0",
     "ol": "^8.1.0",
