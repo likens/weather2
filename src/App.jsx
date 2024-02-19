@@ -35,7 +35,12 @@ function App() {
 			<div className='min-w-screen min-h-screen'>
 				<div className='flex justify-center'>
 					{appView()}
-					{data() && <img className='fixed top-0 w-screen h-screen block object-cover -z-10' src={`/backgrounds/${getWeatherBackground(data().weather.current.weather[0].id)}.jpg`} />}
+					
+					{data() && 
+						<img className='fixed top-0 w-screen h-screen block object-cover -z-10' 
+							src={getWeatherBackground(
+								data().weather.current.weather[0].id, 
+								data().weather.current.dt > data().weather.daily[0].sunset)} />}
 				</div>
 			</div>
 		</>

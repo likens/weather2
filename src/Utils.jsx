@@ -130,41 +130,57 @@ export const getWeatherIcon = (code = 800, size = 36, night = false) => {
 
 export const getWeatherBackground = (code = 800, night = false) => {
     let modifier = night ? `night`:`day`;
+    let filename = "";
     switch (code) {
         case checkCodes(code, CODE_RAIN_LIGHT):
-            return `rainLight-${modifier}`;
+            filename = `rainLight-${modifier}`;
+            break;
         case checkCodes(code, CODE_RAIN_HEAVY):
-            return `rainHeavy-${modifier}`;
+            filename = `rainHeavy-${modifier}`;
+            break;
         case checkCodes(code, CODE_SNOW_LIGHT):
-            return `snowLight-${modifier}`;
+            filename = `snowLight-${modifier}`;
+            break;
         case checkCodes(code, CODE_SNOW_HEAVY):
-            return `snowHeavy-${modifier}`;
+            filename = `snowHeavy-${modifier}`;
+            break;
         case checkCodes(code, CODE_SNOW_MIXED):
-            return `snowMixed`;
+            filename = `snowMixed`;
+            break;
         case checkCodes(code, CODE_TSTORM):
-            return 'tStorm';
+            filename = 'tStorm';
+            break;
         case checkCodes(code, CODE_CLOUD_HEAVY):
-            return `cloudsHeavy-${modifier}`;
+            filename = `cloudsHeavy-${modifier}`;
+            break;
         case checkCodes(code, CODE_CLOUD_LIGHT):
-            return `cloudsLight-${modifier}`;
+            filename = `cloudsLight-${modifier}`;
+            break;
         case checkCodes(code, CODE_CLEAR):
-            return `clear-${modifier}`;
+            filename = `clear-${modifier}`;
+            break;
         case checkCodes(code, CODE_ATMOSPHERE):
             switch (code) {
                 case CODE_MIST:
-                    return 'haze';
+                    filename = 'haze';
+                    break;
                 case CODE_HAZE:
-                    return 'haze';
+                    filename = 'haze';
+                    break;
                 case CODE_WIND:
-                    return 'wind';
+                    filename = 'wind';
+                    break;
                 case CODE_TORNADO:
-                    return 'tornado';
+                    filename = 'tornado';
+                    break;
                 default:
-                    return `fog-${modifier}`;
+                    filename = `fog-${modifier}`;
+                    break;
             }
         default:
-            return <IconCloud size={size} />;
+            filename = `clear-${modifier}`;
     }
+    return `/backgrounds/${filename}.jpg`;
 }
 
 export const geocodingFetchData = (lat, lon) => {
