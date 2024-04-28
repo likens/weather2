@@ -17,8 +17,8 @@ function Start(props) {
                 <SearchGeolocation />
                 {/* <SearchSaved /> */}
                 <SearchQuery />
-                <div className='self-end fixed bottom-0 left-0 w-full text-center'>
-                    <a className='text-neutral-200 dark:text-neutral-700 text-xs uppercase p-2 inline-flex' href="https://weather.likens.dev">Weather <IconArrowUpRight size={16} /></a>
+                <div className='w-full text-center'>
+                    <a className='text-neutral-400 dark:text-neutral-700 text-xs uppercase p-2 inline-flex font-bold' href="https://weather.likens.dev">Weather <IconArrowUpRight size={16} /></a>
                 </div>
             </div>
         </>
